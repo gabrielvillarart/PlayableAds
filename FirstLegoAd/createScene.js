@@ -5,10 +5,13 @@ import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import "@babylonjs/core/Materials/standardMaterial";
 
-const canvas = document.getElementById('renderCanvas');
+import { Game } from './game.js';
 
-export function createScene(engine) {
-    const scene = new Scene(engine);
+const canvas = Game.canvas;
+
+export function createScene() {
+    const scene = new Scene(Game.engine);
+    Game.scene = scene;
 
     const camera = new ArcRotateCamera(
         "camera",
@@ -16,13 +19,15 @@ export function createScene(engine) {
         Math.PI / 4,
         10,
         Vector3.Zero(),
-        scene);
-    camera.attachControl(canvas, true); // Enable mouse controls
-    camera.radius = 5;
+        scene
+    );
+    Game.camera = camera;
+    Game.camera.attachControl(canvas, true); // Enable mouse controls
+    Game.camera.radius = 5;
 
     const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+    Game.light = light;
 
-    const box = MeshBuilder.CreateIcoSphere("MainBox");
-    
-    return scene;
+    const box = MeshBuilder.CreateBox("MainBox");
+    Game.cube = box;
 }
